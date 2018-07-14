@@ -14,9 +14,9 @@ const TaskSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    completedDate: {
-        type: Date,
-        default: null
+    createdBy: {
+        type: String,
+        required: true
     }
 }, {
     timestamps: true

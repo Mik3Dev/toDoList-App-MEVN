@@ -3,7 +3,7 @@ const _ = require('lodash');
 
 module.exports = {
     index(req, res) {
-        Task.find()
+        Task.find({createdBy: req.user._id})
             .then(resp => {
                 res.send(resp);
             }).catch(e => {
@@ -12,7 +12,7 @@ module.exports = {
             })
     },
     show(req, res){
-        Task.findById(req.params.id)
+        Task.findOne({_id: req.params.id, createdBy: req.user._id})
             .then(resp => {
                 res.send(resp);
             }).catch(e => {
@@ -22,7 +22,7 @@ module.exports = {
             })
     },
     create(req, res){
-        const newTask = new Task(_.pick(req.body, ['title', 'content']));
+        const newTask = new Task(_.merge(_.pick(req.body, ['title', 'content']),{createdBy: req.user._id}));
         newTask.save()
             .then(resp => {
                 res.send(resp);
@@ -32,12 +32,8 @@ module.exports = {
             });
     },
     update(req, res){
-        const body = _.pick(req.body, ['title', 'content']);
-        console.log(body);
-        Task.findByIdAndUpdate(req.params.id, {
-            title: body.title,
-            content: body.content
-        }).then(resp => {
+        const body = _.merge(_.pick(req.body, ['title', 'content', 'completed']),{createdBy: req.user._id});
+        Task.findOneAndUpdate({_id: req.params.id, createdBy: req.user._id}, body).then(resp => {
             res.send(resp)
         }).catch(e => {
             console.log(e);
@@ -45,7 +41,7 @@ module.exports = {
         })
     },
     delete(req, res){
-        Task.findByIdAndRemove(req.params.id)
+        Task.findOneAndRemove({_id: req.params.id, createdBy: req.user._id})
             .then(resp => {
                 res.send(resp);
             }).catch(e => {

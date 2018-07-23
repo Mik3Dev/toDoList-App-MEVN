@@ -1,6 +1,6 @@
 {
     "PORT": 3000,
-    "MONGODB_URI": "mongodb://appUser:123abc@ds149960.mlab.com:49960/task-list",
+    "MONGODB_URI": "YOUR_MONGO_DB_URI",
     "BCRYPT_SECRET": "yourBcryptSecretKey",
     "JWT_SECRET": "yourJsonWebTokenSecretKey"
 }

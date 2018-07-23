@@ -15,7 +15,7 @@ mongoose.connect(config.MONGODB_URL)
         console.log('Unable to connect to database');   
     });
 
-app.set('PORT', process.env.PORT || 3000);
+app.set('PORT', process.env.PORT || config.PORT);
 app.use(logger('dev'));
 app.use(express.json());
 

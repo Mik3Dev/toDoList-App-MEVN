@@ -1,17 +1,30 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const VueLoaderPlugin = require('vue-loader/lib/plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const { VueLoaderPlugin } = require('vue-loader')
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 module.exports = {
-    // entry: ['./src/index.js', './src/scss/main.scss '],
-    entry: './src/index.js',
+    entry: {
+        app: './src/index.js',
+        vendors: ['vue', 'vue-router', 'axios']
+    },
     output: {
-        filename: 'bundle.js',
-        path: path.join(__dirname, 'server/public/js')
+        filename: '[name].bundle.js',
+        path: path.join(__dirname, 'server/public/assets')
+    },
+    resolve: {
+        alias: {
+            'vue$': 'vue/dist/vue.esm.js'
+        },
+        extensions: ['*', '.js', '.vue', '.json']
     },
     module: {
         rules: [{
+            test: /\.(js|vue)$/,
+            use: 'eslint-loader',
+            enforce: 'pre'
+        },
+        {
             test: /\.vue$/,
             exclude: /node_modules/,
             loader: 'vue-loader'
@@ -22,27 +35,19 @@ module.exports = {
             use: {
                 loader: 'babel-loader',
                 options: {
-                    presets: ['babel-preset-env']
+                    compact: 'false'
                 }
             }
-        }, {
-            test: /\.(sass|scss)$/,
-            use: [
-                MiniCssExtractPlugin.loader,
-                'css-loader',
-                'sass-loader'
-            ]
         }]
     },
     plugins: [
+        new CleanWebpackPlugin(['./server/public']),
         new HtmlWebpackPlugin({
             title: 'ToDo App',
             template: './src/index.html',
-            filename: './../index.html'
+            filename: './../index.html',
+            inject: true
         }),
         new VueLoaderPlugin(),
-        new MiniCssExtractPlugin({
-            filename: './../css/bundle.css'
-        })
     ]
 }

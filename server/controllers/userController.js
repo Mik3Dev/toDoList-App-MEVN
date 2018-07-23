@@ -23,6 +23,23 @@ userController = {
             }).catch(e => {
                 res.status(400).send();
             })
+    },
+    findByToken(req, res) {
+        const token = req.headers('X-Auth');
+        User.findByToken(token)
+        .then(user => {
+            if(!user){
+                return Promise.reject();
+            }
+
+            const userFound = {
+                user,
+                token
+            } 
+            res.send(userFound);
+        }).catch(err => {
+            res.status(401).send();
+        })
     }
 }
 

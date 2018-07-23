@@ -1,5 +1,12 @@
+const config = require('./config.json');
+const bcryptSecret = process.env.BCRYPT_SECRET | config.BCRYPT_SECRET;
+const jwtSecret = process.env.JWT_SECRET | config.JWT_SECRET;
+const mongodbURI = process.env.MONGODB_URI |  config.MONGODB_URI;
+const port = process.env.PORT | config.PORT;
+
 module.exports = {
-    'BCRYPT_SECRET': 'yourBcryptSecretKey',
-    'JWT_SECRET': 'yourJsonWebTokenSecretKey',
-    'MONGODB_URL': 'mongodb://appUser:123abc@ds149960.mlab.com:49960/task-list'
+    'PORT': port,
+    'BCRYPT_SECRET': bcryptSecret,
+    'JWT_SECRET': jwtSecret,
+    'MONGODB_URL': mongodbURI 
 }
